@@ -92,7 +92,7 @@ body {
   margin-top: 5px;
 }
 .btn:hover{
-  transform: scale(1.05);
+  transform: scale(1.03);
   box-shadow: 0 0 3px  #DDDDDD;
 } 
 .btn-primary{
@@ -424,7 +424,6 @@ transition: background-color 0 ease ;
 }
 .project-action .btn:hover {
   transform: none;
-  background-color: #000;
 }
 
 .projects-card:hover .project-action {
@@ -835,3 +834,21 @@ transform: scale(1.001);
 /* Saves style end */
 
 
+/* pricing style start */
+.PricingFeature{
+  cursor: pointer;
+  padding: 3px;
+  transition: all 0.2;
+} 
+.PricingFeature:hover{
+  transform: scale(1.02) !important;
+  box-shadow: 0 0 3px  #DDDDDD;
+} 
+
+.pricing-card:hover{
+  transform: none;
+  transform: translateY(-5px);
+  transition: 0.3s ease;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+/* pricing style end */

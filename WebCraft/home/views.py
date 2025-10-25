@@ -125,6 +125,12 @@ class PricingView(generics.ListCreateAPIView):
     serializer_class = Pricing_serializer
     queryset = Pricing.objects.all()
 
+class ContactUSView(generics.CreateAPIView):
+    serializer_class = ContactUS_serializer
+    queryset = ContactUS.objects.all()
+
+    def perform_create(self, serializer):
+        serializer.save()
 
 
 

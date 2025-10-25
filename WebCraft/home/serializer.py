@@ -86,3 +86,8 @@ class Pricing_serializer(serializers.ModelSerializer):
      class Meta:
         model = Pricing
         fields = '__all__'
+
+class ContactUS_serializer(serializers.ModelSerializer):    
+     class Meta:
+        model = ContactUS
+        fields = '__all__'

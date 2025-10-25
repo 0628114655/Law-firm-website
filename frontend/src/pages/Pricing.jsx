@@ -1,5 +1,7 @@
 import React from 'react'
 import { useState, useEffect } from "react";
+import * as Icons from 'react-icons/fa';
+
 
 
 function Pricing() {
@@ -7,37 +9,42 @@ function Pricing() {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState()
     
-    function Prices  ({prices}) {
-        const [showAll, setShowAll] = useState(false)
-        return(
-            <>
-                <div className="col col-md-4 col-12 my-3 border p-2 shadow position-relative" style={{backgroundColor: `${prices.plan.color}`, borderRadius: '10px'}}>
-                    <h4 className='d-flex justify-content-center  ' > الخطة: {prices.plan.title} </h4>           
-                    <ul>
-                        {prices.description.map(feature => (
-                            <li key={feature.id}>
-                                {feature.icon && <span>{feature.icon} </span>}
-                                {feature.description}
-                            </li>
-                            )).slice(0, showAll?prices.description.length:10)}
-                    </ul>
-                    <div className="text-center mt-2">
-
-                        { !showAll && prices.description.length > 10 &&
-                            <button className='btn btn-outline-dark mt-2 mb-1' style={{}}  key={prices.id} onClick={()=>setShowAll(true)}>شاهد المزيد ...</button>
-                            
-                        }
-                        {
-                            showAll &&
-                            <button className='btn btn-outline-secondary mt-2 mb-1' key={prices.id} onClick={()=>setShowAll(false)}>عرض أقل  </button>
-                        }
-                    </div>
-
-                    <strong className='d-flex justify-content-center ' style={{}}> السعر المبدئي* : {prices.price} درهم ({prices.price / 10 } $)</strong>
-               </div>
-            </>
-        )
+    function Prices({ prices }) {
+        const [showAll, setShowAll] = useState(false);
+    
+        return (
+            <div >
+                <h4 className='d-flex justify-content-center fw-bold '>الخطة: {prices.plan.title}</h4>
+                
+                    {prices.description
+                        .slice(0, showAll ? prices.description.length : 10)
+                        .map((feature) => {
+                            const PriceIcon = feature.icon ? Icons[feature.icon] : null;
+                            return (
+                                <div key={feature.id} className='PricingFeature d-flex align-items-center mb-2'>
+                                    {PriceIcon && <span className="me-2 mx-2"><PriceIcon color={prices.plan.color === '#FFD700' ? '#fff' : '#222'} /></span>}
+                                    {feature.description}
+                                </div>
+                            );
+                        })}
+    
+                <div className="text-center mt-2">
+                    {!showAll && prices.description.length > 10 && (
+                        <button className='btn btn-outline-dark mt-2 mb-5' onClick={() => setShowAll(true)}>
+                            شاهد المزيد ...
+                        </button>
+                    )}
+                    {showAll && (
+                        <button className='btn btn-outline-secondary mt-2 mb-5' onClick={() => setShowAll(false)}>
+                            عرض أقل
+                        </button>
+                    )}
+                </div>
+    
+            </div>
+        );
     }
+    
     useEffect(() =>{
         const getPrices =  async () => {
             try{
@@ -64,17 +71,30 @@ function Pricing() {
                         <span className="visually-hidden">جارٍ التحميل...</span>
                     </div>
                 </div>) :
-        <div className='row justify-content-around'>
+                <>
             <h3>التسعير</h3>
             <h6> نقدم في موقعنا العديد من خطط التسعير المختلفة والتي نطمح من خلالها إلى مساعدتكم على إنشاء موقعكم الإلكتروني بالسعر المناسب </h6>
 
+        <div className='row d-flex justify-content-around p-1'  >
            { pricing.map( p => (
-                <Prices key={p.id} prices = {p} />
+                <div className="col col-lg-4 col-sm-12 col-12 my-3 border p-2 shadow position-relative" >
+                <div className="card pricing-card h-100 border-0 shadow" style={{ backgroundColor: `${p.plan.color}33`, border: `2px solid ${p.plan.color}`, borderRadius: '10px' }}>
+                    <div className="card-body">
+                        <Prices key={p.id} prices={p} />
+                    </div>
+                    <div className="card-footer text-center bg-transparent border-0">
+                        <strong>
+                        السعر المبدئي* : {p.price} درهما ({p.price / 10} $)
+                        </strong>
+                    </div>
+                </div>
+                </div>
             ))}
                <small>* ملحوظة : الأسعار أعلاه مبدئية ويمكن أن تتغير حسب حجم المشروع ومتطلباته. </small>
         </div> 
+        </>
   }
-  </div>
+    </div>
     )
 }
 

@@ -33,7 +33,7 @@ function Nav({favoritesCount, savesCount}) {
                 <Link to={'projects/'} className={`nav-link ${isActive('/projects/') ? "active" : ""} ${isActiveSubLinks('/project/') ? "active" : ""} `}> <span> < FaBriefcase/></span> أعمالنا</Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" > <span>  <FaEnvelope/> </span> تواصل معنا</Link>
+                <Link  to={'ContactUs/'} className={`nav-link ${isActive('/ContactUs/') ? "active" : ""}`} > <span>  <FaEnvelope/> </span> تواصل معنا</Link>
               </li>
               <li className="nav-item">
                 <Link to={'questions/'} className={`nav-link ${isActive('/questions/') ? "active" : ""}`} > <span> <FaQuestionCircle/></span>  الأسئلة المتكررة</Link>

@@ -16,5 +16,6 @@ urlpatterns = [
     path('Saves/<pk>/', views.SavesView.as_view(), name ='Saves-detail'),
     path('PricingFeature/', views.PricingFeatureView.as_view(), name ='PricingFeature'),
     path('Pricing/', views.PricingView.as_view(), name ='Pricing'),
+    path('ContactUS/', views.ContactUSView.as_view(), name ='ContactUS'),
 
 ]+static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
