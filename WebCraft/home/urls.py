@@ -14,8 +14,9 @@ urlpatterns = [
     path('Favourites/<pk>/', views.FavouritesView.as_view(), name= 'favourites-detail'),
     path('Saves/', views.SavesView.as_view(), name= 'Saves'),
     path('Saves/<pk>/', views.SavesView.as_view(), name ='Saves-detail'),
-    path('PricingFeature/', views.PricingFeatureView.as_view(), name ='PricingFeature'),
-    path('Pricing/', views.PricingView.as_view(), name ='Pricing'),
+    path('AboutUs/', views.AboutUs_view.as_view(), name ='AboutUs'),
+    path('CV/', views.CV_view.as_view(), name ='CV'),
     path('ContactUS/', views.ContactUSView.as_view(), name ='ContactUS'),
+    path('Blog/', views.BlogView.as_view(), name ='Blog'),
 
 ]+static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

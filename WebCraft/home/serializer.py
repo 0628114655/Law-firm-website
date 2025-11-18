@@ -68,26 +68,22 @@ class Saves_serializer(serializers.ModelSerializer):
         )
         return savedproject
    
-class Plan_serializer(serializers.ModelSerializer):
+class AboutUs_serializer(serializers.ModelSerializer):
    class Meta:
-        model = Plan
+        model = AboutUs
         fields = '__all__'
-
-class PricingFeature_serializer(serializers.ModelSerializer):
+        
+class CV_serializer(serializers.ModelSerializer):
    class Meta:
-        model = PricingFeature
-        fields = '__all__'
-
-class Pricing_serializer(serializers.ModelSerializer):
-     description = PricingFeature_serializer(many=True)  # nested
-     plan = Plan_serializer()           
-     services = serializers.StringRelatedField()        
-
-     class Meta:
-        model = Pricing
+        model = CV
         fields = '__all__'
 
 class ContactUS_serializer(serializers.ModelSerializer):    
      class Meta:
         model = ContactUS
+        fields = '__all__'
+
+class Blog_serializer(serializers.ModelSerializer):    
+     class Meta:
+        model = Blog
         fields = '__all__'

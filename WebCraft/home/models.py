@@ -72,38 +72,23 @@ class SavedProjects(models.Model):
     class Meta:
         unique_together = ('project',  'visitor_id')
 
-class Plan(models.Model):
-    id = models.AutoField(primary_key= True)
+
+class AboutUs(models.Model):
     title = models.CharField(max_length = 100)
-    color = models.CharField(max_length = 50, null = True, blank = True)
+    image = models.ImageField()
+    text = models.TextField()
+    description = models.TextField()
 
     def __str__(self):
-        return self.title
-
-class PricingFeature(models.Model):
-    id = models.AutoField(primary_key = True)
-    service = models.ForeignKey(Service, on_delete = models.CASCADE)
-    plan = models.ManyToManyField(Plan)
-    description = models.JSONField(null = True, blank = True) 
-    icon = models.CharField(null = True, blank = True)
-    order = models.IntegerField(null = True, blank = True)
-
-    def __str__(self):
-        plan_titles = ", ".join([plan.title for plan in self.plan.all()])
-        return f'{self.service} - { plan_titles } - {self.description}' 
-    class Meta: 
-        ordering = ['order']
-
-
-class Pricing(models.Model):
-    id = models.AutoField(primary_key=True)
-    plan = models.ForeignKey(Plan, on_delete=models.CASCADE, null = True, blank = True)
-    services = models.ForeignKey(Service, on_delete = models.CASCADE, null = True, blank = True)
-    description = models.ManyToManyField(PricingFeature)
-    price = models.DecimalField(max_digits=8, decimal_places=2)
-    def __str__(self):
-        return f'{self.services} : {self.plan}'
+        return f'{self.title}'
     
+class CV (models.Model):
+    content = models.JSONField()
+    icon = models.CharField(max_length = 100, default = 'ABC')
+
+    def __str__(self):
+        return f'{self.content}'
+
 class ContactUS(models.Model):
     FirstName = models.CharField(max_length = 100, null = True, blank = True)
     LastName = models.CharField(max_length = 100, null = True, blank = True)
@@ -114,6 +99,16 @@ class ContactUS(models.Model):
 
     def __str__(self):
         return f'Message from {self.FirstName} {self.LastName} about {self.subject}'
+    
+
+class Blog(models.Model):
+    title = models.CharField(max_length = 100, null = True, blank = True)
+    introduction = models.TextField(default = 'dd')
+    content = models.TextField( null = True, blank = True)
+    conclusion = models.TextField(default = 'dd')
+
+    def __str__(self):
+        return self.title
     
 
 
