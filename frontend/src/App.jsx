@@ -9,10 +9,10 @@ import  Questions  from "./pages/Questions";
 import  Projects  from "./pages/Projects";
 import  Project  from "./pages/Project";
 import  Favourites  from "./pages/Favourites";
-import  Saves  from "./pages/Saves";
+import  Blog  from "./pages/Blog";
 import { BrowserRouter as Router, Route, Routes, } from 'react-router-dom'
 import { useEffect, useState } from "react";
-import Pricing from './pages/Pricing';
+import AboutUs from './pages/AboutUs';
 import ContactUs from './pages/ContactUs';
 
 
@@ -74,8 +74,8 @@ function App() {
             <Route path='/projects' element={<Projects projectAllLikes = {projectAllLikes} fetchFavouritesCount = {fetchFavouritesCount} favouritesList = {favouritesList} fetchSavesCount = {fetchSavesCount} savesList = {savesList} />}/> 
             <Route path='/project/:id/' element={<Project/>}/> 
             <Route path='/favourites/' element={<Favourites fetchFavouritesCount = {fetchFavouritesCount}  favouritesList = {favouritesList}   />}/> 
-            <Route path='/saves/' element={<Saves fetchSavesCount = {fetchSavesCount}   savesList = {savesList} />}/> 
-            <Route path='/pricing/' element={<Pricing />}/> 
+            <Route path='/blog/' element={<Blog />}/> 
+            <Route path='/AboutUs/' element={<AboutUs />}/> 
             <Route path='/ContactUS/' element={<ContactUs />}/> 
         </Routes>
         < Footer /> 

@@ -2,3 +2,5 @@ django
 python-decouple
 pillow
 react
+django_rest_framework
+django-cors-headers

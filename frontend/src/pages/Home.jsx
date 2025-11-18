@@ -8,55 +8,24 @@ import { Link } from 'react-router-dom'
 
 
 
-function Home(projectAllLikes) {
-  const categoryColors = {
-    "متجر إلكتروني": "#28a745",
-    "مدونة": "#007bff",
-    "منصة تعليمية": "#ffc107",
-    "خدمات": "#6f42c1",
-  };
+function Home() {
 
-
-
-  
   function Services({ serviceIcon, content, title }) {
     const IconComponent = Icons[serviceIcon]; 
     return (
       <div className=' '>
-          <h4> <IconComponent  title= {title} className='icon home-service-icon mb-2 icon-bronze '/> {title} </h4>
+          <h4> <IconComponent  title= {title} className='icon home-service-icon mb-2 icon-blue '/> {title} </h4>
           <small className='d-block text-align-justify'>{content.slice(0,100)}...</small>
       </div>  
   
   
     )
   }
-  function LatestProjects({project}){
-    return (
-      <div className='col col-md-6 col-12 my-2'>
-      <div className='card home-projects-card '>
-        <div className='home-project-img position-relative overflow-hidden'>
-          {project.type &&<div className='badge category-badge' style={{backgroundColor : categoryColors[project.type] || "#ccc"}} > {project.type} </div>}
-          <img className="card-img-top img-fluid" src={project.images?.[0]?.image} alt={project.title} />     
-        </div> 
-        <div className="card-body">
-          <Link to={`/project/${project.id}/`} className=" text-decoration-none">
-            <h6 className="card-title text-dark" title='معاينة المشروع'>{project.title}</h6>
-          </Link>
-        </div>
-        <div className='project-statistics-container' style={{position : 'absolute', bottom: '10px', left : '10px'}}>
-          <span className='project-likes m-1 text-secondary'> < Icons.FaHeart className='project-likes-icon' /> {projectAllLikes[project.id]? projectAllLikes[project.id] : 0} </span>
-          <span className='project-views m-1 text-secondary'> < Icons.FaEye  className='project-views-icon'/> {project.views} </span>
-        </div>
-      </div>
-      
-    </div>
-    )
-  }
+ 
 
   let [content, setContent] = useState  ([])
   let [backgroundimage, setBackgroundimage] = useState  ()
   const [services, setServices] =  useState ([])
-  const [projects, setProjects] =  useState ([])
   const [bgLoaded, setBgLoaded] = useState(false);
   const [showScroll, setShowScroll] = useState(false);
 
@@ -64,16 +33,14 @@ function Home(projectAllLikes) {
 
 useEffect(() =>{
     const getContent = async () => {
-      const [contentRes, imgRes, projectsRes] = await Promise.all([fetch("http://192.168.91.1:8000/"),fetch("/BackgroundImages/"), fetch('/Projects/')]);
+      const [contentRes, imgRes] = await Promise.all([fetch("http://192.168.91.1:8000/"),fetch("/BackgroundImages/")]);
       let data = await contentRes.json()
       let imgData = await imgRes.json()
-      let projects = await projectsRes.json()
       const imgUrl = imgData.img.image;
 
       const img = new Image();
       img.src = imgUrl;
       img.onload = () =>{ setBackgroundimage(imgUrl); setBgLoaded(true)}
-      setProjects(projects.slice(-2))
       setContent(data)
     }  
     getContent()
@@ -95,6 +62,8 @@ useEffect ( () => {
  useEffect(() => {
   const initObserver = () => {
     const buttons = document.querySelectorAll('.subTitleCont .btn');
+    const btns = document.querySelectorAll('.mosquira-container .service');
+
     if (buttons.length === 0) return false;
 
     const observer = new IntersectionObserver(
@@ -102,7 +71,9 @@ useEffect ( () => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             const index = Array.from(buttons).indexOf(entry.target);
+            const inx = Array.from(btns).indexOf(entry.target);
             entry.target.style.transitionDelay = `${index * 0.1}s`;
+            entry.target.style.transitionDelay = `${inx * 0.1}s`;
             entry.target.classList.add('visible');
             observer.unobserve(entry.target);
           }
@@ -112,6 +83,7 @@ useEffect ( () => {
     );
 
     buttons.forEach((btn) => observer.observe(btn));
+    btns.forEach((button) => observer.observe(button));
     return true;
   };
 
@@ -162,15 +134,15 @@ const scrollToTop = ()=> {
     <> 
       <div className='container-fluid p-0 position-relative text-white' style={{backgroundImage: `url(${backgroundimage})`,backgroundSize: 'cover',backgroundPosition: 'center',backgroundRepeat: 'no-repeat',opacity: 1}}>
       {bgLoaded ?
-              (<div className=' overlay-text p-4 position-relative ' > 
+              (<div className=' overlay-text p-4 position-relative mosquira-container' > 
               {
                 content.map(cont =>
-                  <div className=' p-2 m-1 mx-4' key={cont.id}>
-                    <h3>{cont.title}</h3>
-                    <p className='intro'>{cont.content}</p>
+                  <div className=' p-2 m-1 mx-4 ' key={cont.id}>
+                    <h3 className='service'>{cont.title}</h3>
+                    <p className='intro service'>{cont.content}</p>
                   </div>)
               }
-                <a href="https://wa.me/+2120628114655" className='btn  btn-outline-success home-card-btn  d-flex align-items-center justify-content-center gap-2 mt-5' target='blank'> <Icons.FaWhatsapp size={20}/><span style={{fontSize: '1.1rem'}}>اطلب موقعك الآن</span> </a>
+                <a href="https://wa.me/+2120628114655" className='btn  btn-outline-success home-card-btn  d-flex align-items-center justify-content-center gap-2 mt-5 ' target='blank'> <Icons.FaWhatsapp size={20}/><span style={{fontSize: '1.1rem'}}>تواصل معنا الآن</span> </a>
                 {showScroll &&
                   <button className='btn  btn-dark bg-secondary scroll-bar  gap-2 mt-5' onClick={()=> scrollToTop()}> <ScrollArrow size={30}/> </button>
                 }
@@ -192,7 +164,7 @@ const scrollToTop = ()=> {
     <div className='container '>
       
       <div className='my-5 subTitleCont'>
-          <h3 className='subTitle bronze-gradient'> <Icons.FaGlobe className=' mb-2' /> خدماتنا</h3>
+          <h3 className='subTitle icon-blue'> <Icons.FaBalanceScale className=' mb-2' /> خدماتنا</h3>
           <div className='row d-flex align-items-start mt-3  mx-1' >
                 {services.map( (s, index )=>{
                 return  index < 3 ?(
@@ -202,70 +174,92 @@ const scrollToTop = ()=> {
                                 )
                               :index === 3 && (
                                   <Link to={'services/'} className="col btn home-square col-12 d-flex flex-col items-center  text-center gap-2 p-1 my-2 see-more" key="see-more">
-                                      <h4 className='w-100'> <Icons.FaEllipsisH className='icon home-service-icon mb-2 icon-bronze '  title='شاهد المزيد' />  خدمات أخرى </h4>
+                                      <h4 className='w-100'> <Icons.FaEllipsisH className='icon home-service-icon mb-2 icon-blue '  title='شاهد المزيد' />  خدمات أخرى </h4>
                                   </Link>
                                 )
                               })}
           </div>
       </div>  
-      <div className='my-5 why-us subTitleCont'>
-          <h3 className='subTitle bronze-gradient'> <Icons.FaStar  className='mb-2'/> لماذا نحن؟</h3>
-          <div className='row d-flex  justify-content-center align-items-center mx-1' >
-                                <div className="col home-square btn col-md-3 col-6 col-sm-6 flex flex-col  items-center text-center gap-2 p-3  my-2" >                                  
-                                  <h4> <Icons.FaBolt size={30} className="mb-2 icon-bronze" /> سرعة التنفيذ</h4>
-                                  <p  className="text-gray-600 text-sm text-align-justify">ننجز المشاريع بكفاءة عالية وفي وقت قياسي دون التأثير على الجودة.</p>
-                                </div>
-                                <div className="col home-square btn col-md-3 col-6 col-sm-6 flex flex-col items-center text-center gap-2 p-3 my-2" > 
-                                  <h4> <Icons.FaHeadset size={30} className="mb-2 icon-bronze"  /> دعم 24/7</h4>
-                                  <p  className="text-gray-600 text-sm text-align-justify">فريقنا متاح على مدار الساعة لحل مشاكلك والرد على استفساراتك.</p>
-                                </div>
-                                <div className="col home-square btn col-md-3 col-6 col-sm-6 flex flex-col items-center text-center gap-2 p-2 my-2" > 
-                                  <h4> <Icons.FaSmile size={30} className="mb-2 icon-bronze"  /> تجربة مستخدم مميزة</h4>
-                                  <p  className="text-gray-600 text-sm text-align-justify">نصمم حلولًا سهلة الاستخدام تمنح عملاءك تفاعلًا سلسًا وفعالًا.</p>
-                                </div>
-                                <div className="col home-square btn col-md-3 col-6 col-sm-6 flex flex-col items-center text-center gap-2 p-3 my-2" >
-                                  <h4> <Icons.FaMobileAlt size={30} className="mb-2 icon-bronze" /> تصميم متجاوب</h4>
-                                  <p  className="text-gray-600 text-sm text-align-justify">مواقع وتطبيقات تعمل بانسيابية على جميع الأجهزة والشاشات.</p>
-                                </div>
-                                <div className="col home-square btn col-md-3 col-6 col-sm-6 flex flex-col items-center text-center gap-2 p-3 my-2" > 
-                                  <h4> <Icons.FaTags size={30} className="mb-2 icon-bronze"  /> أسعار تنافسية</h4>
-                                  <p  className="text-gray-600 text-sm text-align-justify">خدمات احترافية بجودة عالية وتكلفة مناسبة لميزانيتك.</p>
-                                </div>
-                             
-          </div>
-      </div>
+
       <div className='my-5 subTitleCont'>
-        <h3 className='subTitle bronze-gradient'> < Icons.FaBriefcase className='mb-2' /> أحدث أعمالنا </h3>
-        <div className='row d-flex p-1 justify-content-center align-items-center mx-1' >
-          {projects.map(project =>(
-                              
-              <LatestProjects  key={project.id} project={project}/>
-              ))}
-        </div>
-      </div>
-      <div className='my-5 subTitleCont'>
-          <h3 className='subTitle bronze-gradient '> <Icons.FaStar  className='mb-2 icon-bronze'/> مبادؤنا </h3>
+          <h3 className='subTitle icon-blue '> <Icons.FaUniversity  className='mb-2 icon-blue'/> مجالات اشتغال المكتب </h3>
           <div className='row d-flex  justify-content-center align-items-start mx-1' >
                                 <div className="col home-square btn col-md-3 col-6 col-sm-4 flex flex-col items-center text-center gap-2 p-2 my-2" >                                  
-                                  <h4>  <Icons.FaAward size={30} className="mb-2 icon-bronze "  title='الجودة' /> الجودة</h4>
-                                  <p  className="text-gray-600 text-sm ">نُسلّم حلولًا متقنة بمعايير اختبار واضحة.</p>
+                                  <h4>  <Icons.FaBalanceScale size={30} className="mb-2 icon-blue mx-1"  title='القضايا المدنية' />القضايا المدنية</h4>
+                                  <p  className="text-gray-600 text-sm ">نترافع في مختلف المنازعات المدنية بما في ذلك التعويضات، العقود المدنية، المسؤولية التقصيرية... مع الحرص على إيجاد حلول قانونية فعالة تحفظ حقوق الموكلين وتضمن العدالة.</p>
                                 </div>
                                 <div className="col home-square btn col-md-3 col-6 col-sm-4 flex flex-col items-center text-center gap-2 p-2 my-2" >                                  
-                                    <h4><Icons.FaHandshake size={30} className="mb-2 icon-bronze"  title='الالتزام'/> الالتزام </h4>
-                                    <p  className="text-gray-600 text-sm">مواعيد دقيقة وتحديثات مستمرة حتى التسليم.</p>
+                                    <h4><Icons.FaHeart size={30} className="mb-2 icon-blue"  title=' القضايا الأسرية'/>  القضايا الأسرية </h4>
+                                    <p  className="text-gray-600 text-sm">نولي القضايا الأسرية عناية خاصة، سواء المتعلقة بالزواج،الطلاق، النفقة،الحضانة، مع مراعاة الجوانب الإنسانية والاجتماعية التي تميز هذا النوع من النزاعات.</p>
                                 </div>
                                 <div className="col home-square btn col-md-3 col-6 col-sm-4 flex flex-col items-center text-center gap-2 p-2 my-2" >                                  
-                                    <h4><Icons.FaEye size={30} className="mb-2 icon-bronze"  title='الشفافية'/> الشفافية </h4>
-                                    <p  className="text-gray-600 text-sm">تسعير واضح وتقارير تقدم بدون مفاجآت.</p>
+                                    <h4><Icons.FaHome size={30} className="mb-2 icon-blue"  title='القضايا العقارية'/> القضايا العقارية </h4>
+                                    <p  className="text-gray-600 text-sm">نقدم خدمات متكاملة في القضايا العقارية تشمل النزاعات حول الملكية، الكراء، نزع الملكية، التحفيظ، والتصرفات العقارية، مع متابعة دقيقة للإجراءات القانونية أمام الجهات المختصة.</p>
                                 </div>
 
                                 <div className="col home-square btn col-md-3 col-6 col-sm-4 flex flex-col items-center text-center gap-2 p-2 my-2" >                                  
-                                    <h4 className=''> <Icons.FaRocket size={30} className="mb-2 icon-bronze"  title='الابتكار'/> الابتكار </h4>
-                                    <p className="text-gray-600 text-sm">أفكار عملية وتقنيات حديثة تخدم الهدف</p>
+                                    <h4 className=''> <Icons.FaDollarSign size={30} className="mb-2 icon-blue"  title='القضايا التجارية'/> القضايا التجارية </h4>
+                                    <p className="text-gray-600 text-sm">نتكفل بمختلف المنازعات التجارية بين الشركات أو الأفراد، بما في ذلك العقود التجارية، الأوراق المالية... مع التركيز على الحلول السريعة والفعالة.</p>
+                                </div> 
+
+                                <div className="col home-square btn col-md-3 col-6 col-sm-4 flex flex-col items-center text-center gap-2 p-2 my-2" >                                  
+                                  <h4 className='w-100'> <Icons.FaEllipsisH className='icon home-service-icon mb-2 icon-blue '  />  قضايا أخرى </h4>
                                 </div>                          
                              
           </div>
       </div>
+
+      <div className='my-5 why-us subTitleCont'>
+          <h3 className='subTitle icon-blue'> <Icons.FaStar  className='mb-2'/> لماذا نحن؟</h3>
+          <div className='row d-flex  justify-content-center align-items-center mx-1' >
+                                <div className="col home-square btn col-md-3 col-6 col-sm-6 flex flex-col  items-center text-center gap-2 p-3 my-2" >                                  
+                                  <h4> <Icons.FaBriefcase size={30} className="mb-2 icon-blue" />  الخبرة القانونية العميقة</h4>
+                                  <p  className="text-gray-600 text-sm text-align-justify">سنوات من الممارسة العملية في مختلف مجالات القانون، مع القدرة على التعامل مع القضايا المعقدة بكفاءة عالية.</p>
+                                </div>
+                                <div className="col home-square btn col-md-3 col-6 col-sm-6 flex flex-col items-center text-center gap-2 p-3 my-2" > 
+                                  <h4> <Icons.FaUserTie size={30} className="mb-2 icon-blue"  /> الاحترافية والمصداقية</h4>
+                                  <p  className="text-gray-600 text-sm text-align-justify"> تقديم الخدمات القانونية بأعلى معايير المهنية، مع الالتزام التام بأخلاقيات المهنة وشفافية التعامل مع العملاء.</p>
+                                </div>
+                                <div className="col home-square btn col-md-3 col-6 col-sm-6 flex flex-col items-center text-center gap-2 p-2 my-2" > 
+                                  <h4> <Icons.FaUserShield size={30} className="mb-2 icon-blue"  /> حماية الحقوق والمصالح</h4>
+                                  <p  className="text-gray-600 text-sm text-align-justify">نسعى لضمان حقوق الموكلين ومصالحهم القانونية، مع تقديم حلول قانونية تحميهم من النزاعات المستقبلية.</p>
+                                </div>
+                                <div className="col home-square btn col-md-3 col-6 col-sm-6 flex flex-col items-center text-center gap-2 p-3 my-2" >
+                                  <h4> <Icons.FaRegLightbulb size={30} className="mb-2 icon-blue" />حلول قانونية مخصصة</h4>
+                                  <p  className="text-gray-600 text-sm text-align-justify">تحليل كل حالة بعناية لتقديم استشارات وخطط قانونية تتناسب مع احتياجات الموكل وأهدافه.</p>
+                                </div>
+                                <div className="col home-square btn col-md-3 col-6 col-sm-6 flex flex-col items-center text-center gap-2 p-3 my-2" > 
+                                  <h4> <Icons.FaComments size={30} className="mb-2 icon-blue mx-1"  />التواصل والدعم المستمر</h4>
+                                  <p  className="text-gray-600 text-sm text-align-justify">توفير تواصل مباشر ومرن مع العملاء، مع متابعة مستمرة للقضايا لضمان نتائج ملموسة ورضا كامل.</p>
+                                </div>
+                             
+          </div>
+      </div>
+      
+      <div className='my-5 subTitleCont'>
+          <h3 className='subTitle icon-blue '> <Icons.FaStar  className='mb-2 icon-blue'/> مبادؤنا </h3>
+          <div className='row d-flex  justify-content-center align-items-start mx-1' >
+                                <div className="col home-square btn col-md-3 col-6 col-sm-4 flex flex-col items-center text-center gap-2 p-2 my-2" >                                  
+                                  <h4>  <Icons.FaBalanceScale size={30} className="mb-2 icon-blue "  title='النزاهة والشفافية' /> النزاهة والشفافية</h4>
+                                  <p  className="text-gray-600 text-sm ">نحرص على الوضوح في كل خطوة، ونلتزم بتقديم الحقائق القانونية كما هي دون تضليل أو مبالغة.</p>
+                                </div>
+                                <div className="col home-square btn col-md-3 col-6 col-sm-4 flex flex-col items-center text-center gap-2 p-2 my-2" >                                  
+                                    <h4><Icons.FaUserShield size={30} className="mb-2 icon-blue"  title='السرية والثقة'/> السرية والثقة </h4>
+                                    <p  className="text-gray-600 text-sm">نحافظ على سرية المعلومات والوثائق الخاصة بموكلينا، ونعتبر الثقة ركيزة العلاقة المهنية.</p>
+                                </div>
+                                <div className="col home-square btn col-md-3 col-6 col-sm-4 flex flex-col items-center text-center gap-2 p-2 my-2" >                                  
+                                    <h4><Icons.FaGavel size={30} className="mb-2 icon-blue"  title='العدالة والمسؤولية'/> العدالة والمسؤولية </h4>
+                                    <p  className="text-gray-600 text-sm">نلتزم بالسعي الدائم لتحقيق العدالة والدفاع عن الحقوق وفق القوانين وأخلاقيات المهنة.</p>
+                                </div>
+
+                                <div className="col home-square btn col-md-3 col-6 col-sm-4 flex flex-col items-center text-center gap-2 p-2 my-2" >                                  
+                                    <h4 className=''> <Icons.FaBriefcase size={30} className="mb-2 icon-blue"  title='الإتقان والمهنية'/> الإتقان والمهنية </h4>
+                                    <p className="text-gray-600 text-sm">نولي كل قضية الاهتمام الكامل والدراسة الدقيقة لضمان أفضل النتائج القانونية الممكنة.</p>
+                                </div>                          
+                             
+          </div>
+      </div>
+
     </div>
       )}
     </> 

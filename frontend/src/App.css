@@ -208,10 +208,17 @@ body {
     font-family: 'Tajawal';
     font-size: 1.0em;
   }
+  .nav-link:hover {
+    color: #1E3A8A;
+    transform: scale(1.05);
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
 .heart-icon{
   color: #e63946; /* أحمر جذاب */
   transition: all 0.2s  ease-in-out;
 }
+
 .heart-icon:hover{
   color: #ff4d4d; /* أحمر جذاب */
   transform: scale(1.1);
@@ -316,8 +323,8 @@ body {
 .subTitleCont .btn.visible {
   opacity: 1;
   transform: translateY(0) ;
-
 }
+
 .subTitleCont .btn:hover {
   transition: transform 0.3s ease, box-shadow 0.3s ease !important; 
   transform: scale(1.05);
@@ -328,23 +335,11 @@ body {
 .subTitleCont{
   min-height: 50vh;  
 }
-.bronze-gradient {
-  background: linear-gradient(135deg, #b87333, #cd7f32, #e6b17e);
 
-  /* تطبيق التدرج على النص */
-  -webkit-background-clip: text; /* لمتصفحات WebKit مثل Chrome وSafari */
-  background-clip: text;         /* للمتصفحات التي تدعم الخاصية القياسية */
-
-  /* جعل النص شفاف ليظهر التدرج */
-  -webkit-text-fill-color: transparent;
-
-  /* fallback للمتصفحات التي لا تدعم التدرج */
-  color: #cd7f32;
-
+.icon-blue {
+  color: #1E3A8A;
 }
-.icon-bronze {
-  color: #cd7f32;
-}
+
 /* Home style end */
 
 /* Service style start */
@@ -391,6 +386,21 @@ body {
   float: left;
   color: rgb(100, 180, 100);
 }
+
+.service{
+  transition:  0.3s;
+}
+.mosquira-container .service {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  
+}
+
+.mosquira-container .service.visible {
+  opacity: 1;
+  transform: translateY(0) ;
+}
 /* Questions style ends */
 
 
@@ -399,7 +409,6 @@ body {
   transition: .5s;
   height: 450px;
   overflow-y: auto;
-
 }
 .project-action {
 position: absolute;
@@ -482,7 +491,6 @@ transition: .5s;
 .projects-card:hover .project-img img {
 transform: scale(1.001);
 }
-
 
 .category-badge{
   position: absolute;
@@ -852,3 +860,34 @@ transform: scale(1.001);
   box-shadow: 0 8px 20px rgba(0,0,0,0.15);
 }
 /* pricing style end */
+
+/* about us start */
+.element{
+  transition:  0.3s;
+  margin: 2px;
+  margin-top: 5px;
+  cursor: pointer;
+}
+
+.raya-container .element {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;  
+}
+
+.raya-container .element.visible {
+  opacity: 1;
+  transform: translateY(0) ;
+}
+.personal-img{
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+/* about us end */
+
+/* Blog start */
+.pointer {
+  cursor: pointer;
+}
+/* Blog end */
