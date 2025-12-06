@@ -1,21 +1,24 @@
 from django.contrib import admin
 from .models import *
 # Register your models here.
-@admin.register(Favourites)
-class FavouritesAdmin(admin.ModelAdmin):
-    list_display = ('id', 'visitor_id', 'project')  # عرض الحقول في قائمة السجلات
-    search_fields = ('visitor_id', 'project__title')  # خيار 
-class PricingFeatureAdmin(admin.ModelAdmin):
-    list_display = ('id', 'service', 'description')  # عرض الحقول في قائمة السجلات
-    search_fields = ('id', 'service', 'description')  # خيار 
+
+   
+
+class LegalConsultationAdmin(admin.ModelAdmin):
+    list_display = ('fullName', 'numberPhone','consultationSubject')  # عرض الحقول في قائمة السجلات
+    search_fields = ('fullName', 'numberPhone','consultationSubject')  # خيار 
+
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ('fullName', 'numberPhone')  # عرض الحقول في قائمة السجلات
+    search_fields = ('fullName', 'numberPhone')  # خيار 
 admin.site.register(Home)
 admin.site.register(Service)
 admin.site.register(Question)
-admin.site.register(Project)
-admin.site.register(Image)
 admin.site.register(BackgroundImage)
-admin.site.register(SavedProjects)
 admin.site.register(AboutUs)
 admin.site.register(CV)
 admin.site.register(ContactUS)
 admin.site.register(Blog)
+admin.site.register(LegalConsultation, LegalConsultationAdmin)
+admin.site.register(Profile, ProfileAdmin)
+admin.site.register(Notification)

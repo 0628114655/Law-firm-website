@@ -1,6 +1,23 @@
 import rest_framework
 from rest_framework import serializers
 from .models import *
+from django.contrib.auth.models import User
+
+class RegisterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ['fullName', 'numberPhone']
+
+    def create(self, validated_data):
+        user = User.objects.get_or_create(
+            username = validated_data['fullName']
+        )
+        profile = Profile.objects.create(
+            fullName = validated_data['fullName'],
+            numberPhone = validated_data.get('numberPhone'),
+            user = user
+        )
+        return  profile
 
 class Home_serializer(serializers.ModelSerializer):
    class Meta:
@@ -17,57 +34,11 @@ class Question_serializer(serializers.ModelSerializer):
         model = Question
         fields = '__all__'
 
-class Image_serializer(serializers.ModelSerializer):
-   class Meta:
-        model = Image
-        fields = '__all__'
-
 class BackgroundImages_serializer(serializers.ModelSerializer):
    class Meta:
         model = BackgroundImage
         fields = '__all__'
 
-class Project_serializer(serializers.ModelSerializer):
-   images = Image_serializer(read_only=True, many = True)
-
-   class Meta:
-        model = Project
-        fields = '__all__'
-
-class Favourites_serializer(serializers.ModelSerializer):
-   class Meta:
-        model = Favourites
-        fields = ['project', 'id']  # لا نطلب visitor_id من المستخدم
-
-   def create(self, validated_data):
-        visitor_id = self.context['request'].COOKIES.get('visitor_id')
-        if not visitor_id:
-            raise serializers.ValidationError("No visitor_id in cookies.")
-        
-        project = validated_data['project']
-        favorite, created = Favourites.objects.get_or_create(
-            visitor_id=visitor_id,
-            project=project
-        )
-        return favorite
-   
-class Saves_serializer(serializers.ModelSerializer):
-   class Meta:
-        model = SavedProjects
-        fields = ['project', 'id']  # لا نطلب visitor_id من المستخدم
-
-   def create(self, validated_data):
-        visitor_id = self.context['request'].COOKIES.get('visitor_id')
-        if not visitor_id:
-            raise serializers.ValidationError("No visitor_id in cookies.")
-        
-        project = validated_data['project']
-        savedproject, created = SavedProjects.objects.get_or_create(
-            visitor_id=visitor_id,
-            project=project
-        )
-        return savedproject
-   
 class AboutUs_serializer(serializers.ModelSerializer):
    class Meta:
         model = AboutUs
@@ -86,4 +57,14 @@ class ContactUS_serializer(serializers.ModelSerializer):
 class Blog_serializer(serializers.ModelSerializer):    
      class Meta:
         model = Blog
+        fields = '__all__'
+
+class consultation_serializer(serializers.ModelSerializer):    
+     class Meta:
+        model = LegalConsultation
+        fields = '__all__' 
+
+class Notification_serializer(serializers.ModelSerializer):
+   class Meta:
+        model = Notification
         fields = '__all__'
